@@ -1,0 +1,719 @@
+<!doctype html>
+<html>
+<head>
+<title>Progressively Optimized Local Radiance Fields for Robust View Synthesis</title>
+<style>
+html {
+  background-color: #eee;
+  margin: 0;
+  scroll-behavior: smooth;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, helvetica, arial, sans-serif;
+  /* font-size: 11pt; */
+  /* line-height: 1.2em; */
+  font-size: 14px;
+  font-weight: 300;
+  text-align: left;
+  background-color: white;
+  color: #333;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 18px 12px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  -webkit-font-smoothing: antialiased;
+  text-align: justify;
+}
+h1 {
+  text-align: center;
+  line-height: 2em;
+  font-size: 2em;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+h2 {
+  font-size: 1.5em;
+  margin-top: 1.5em;
+  /* margin-bottom: 0; */
+}
+h2 span:last-child {
+  float: right;
+  font-weight: bold;
+  color: #333;
+  background-color: #ddd;
+  border-radius: 0.2em;
+  padding: 0 0.3em 0 0.35em;
+  font-size: 0.8em;
+  font-family: verdana;
+}
+p, ul {
+  /* margin-top: 0.6em;
+  margin-bottom: 1.1em; */
+}
+ul {
+  padding-left: 2em;
+}
+a {
+  text-decoration: underline; color: black;
+}
+a:hover {
+  text-decoration: underline; color: gray;
+}
+a.invert {
+  text-decoration: none; color: white; font-weight: bold;
+}
+a.invert:hover {
+  text-decoration: none; color: #ccc;
+}
+
+div.links {
+  text-align: center;
+  justify-content: space-around;
+  margin-top: 0.5em;
+  margin-bottom: 2.5em;
+  line-height: 2.5em;
+}
+div.links a {
+  text-decoration: none;
+}
+div.links a:hover {
+  text-decoration: none;
+}
+div.links span {
+  background-color: #444;
+  color: white;
+  font-weight: bold;
+  border-radius: 0.5em;
+  padding: 0.4em 1em 0.5em 1em;
+  margin: 0 0.2em;
+  white-space: nowrap;
+}
+div.links span:hover {
+  background-color: #777;
+}
+div.links img {
+  height: 1em;
+  vertical-align: -10%;
+  filter: brightness(0%) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(24deg) brightness(100%) contrast(100%);
+}
+
+/* wrap long lines */
+pre {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+  text-align: left;
+}
+pre {
+  border-left: 5px solid #eee;
+  padding-left: 5px;
+}
+@media only screen and (max-device-width: 480px) {
+  html { background-color: white; }
+  body { width: 97%; box-shadow: none; }
+  body {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust:    100%;
+    -ms-text-size-adjust:     100%;
+  }
+  body { font-size: 1.25em; font-size: 2.1vw; line-height: 1.6em; line-height: 2.7vw; }
+}
+@media print {
+  html { background-color: white; }
+  body { width: 97%; box-shadow: none; }
+}
+
+button {
+  padding: 0.5em 0.75em;
+  margin: 0.4em 0.4em;
+  min-width: 18ch;
+  max-width: 18ch;
+  text-align: left;
+  background-color: #ddd;
+  color: #333;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+
+  @media screen and (-ms-high-contrast: active) {
+    border: 2px solid currentcolor;
+  }
+}
+
+button.on {
+  background-color: #333;
+  color: #eee;
+}
+
+p.btncap {
+  margin: 0.4em 0.4em;
+  padding: 0 0.2em;
+  color: #333;
+  border-bottom: 2px solid #333;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 0.8em;
+}
+
+.center {
+  text-align: center;
+}
+.flex {
+  display: flex;
+}
+.desc {
+  margin: 0em 0.8em;
+}
+.wider_buttons button {
+  display: block;
+  min-width: 18ch;
+  max-width: 18ch;
+}
+.horns button {
+  text-align: center;
+  display: block;
+  min-width: 27ch;
+  width: 180px;
+}
+.tarot button {
+  text-align: center;
+  display: block;
+  min-width: 11ch;
+  width: 95px;
+}
+button {
+  display: block;
+}
+video {
+  max-width: 100%;
+  max-height: 560px;
+  margin: auto;
+  display: none;
+}
+
+video.on {
+  display: block;
+}
+img[id^="img"] {
+  display: none;
+  max-width: 540px;
+  max-height: 540px;
+  width: auto;
+  height: auto;
+  margin: 0.4em;
+}
+img.shiny_img {
+  display: none;
+  width: 504px;
+  height: 284px;
+  margin: 0.4em;
+}
+img.on {
+  display: block;
+}
+
+.column_l { 
+  width: 49%; 
+  float: left; 
+  margin-right: 2%;
+} 
+.column_r { 
+  width: 49%; 
+  float: left; 
+} 
+
+.teaser {
+}
+
+.teaser video {
+  width: 410px;
+}
+
+.teaser .crop {
+  overflow: hidden;
+  height: 307px;
+}
+
+.teaser .horns video {
+  height: 307px;
+  margin-top: 0px;
+}
+
+.teaser .tarot video {
+  height: 410px;
+  margin-top: -65px;
+}
+
+.closeup {
+  width: 100px;
+}
+
+.closeup img {
+  width: 100%;
+}
+
+.closeup div {
+  width: 100%;
+  font-size: 1em;
+  font-weight: 400;
+  text-align: center;
+}
+
+.closeup em {
+  font-weight: 600;
+  font-style: normal;
+}
+
+.authors {
+  display: flex;
+  justify-content: space-evenly;
+  text-align: center;
+}
+
+.authors div {
+  /* width: 25ch; */
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.authors div p:first-child {
+  font-size: 1.1em;
+  margin-bottom: 0.5em;
+}
+
+.authors div p:last-child {
+  margin-top: 0.5em;
+  font-size: 0.95em;
+}
+
+.justify {
+  text-align: justify;
+}
+
+.shadow {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+em {
+  font-weight: bold;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.dropbtn {
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #aaaaaa;}
+
+button:hover {background-color: #aaaaaa;}
+
+</style>
+
+<script>
+class ImageHandler {
+  constructor(n_datasets, n_images, databtn_id, imgbtn_id, imgtag_id) {
+    this.n_datasets = n_datasets;
+    this.n_images = n_images;
+
+    this.databtn_id = databtn_id;
+    this.imgbtn_id = imgbtn_id;
+    this.imgtag_id = imgtag_id;
+  }
+
+  select_image(j) {
+    for (let i = 0; i < this.n_images; i++) {
+      let v = document.getElementById(this.imgtag_id + i.toString());
+      let b = document.getElementById(this.imgbtn_id + i.toString());
+      if (i == j) {
+        b.className = "on";
+        v.style.display = "block";
+      } else {
+        b.className = "";
+        v.style.display = "none";
+      }
+    }
+  };
+
+ select_dataset(j) {
+    let dataset_name = document.getElementById(this.databtn_id + j.toString()).value;
+    for (let i = 0; i < this.n_datasets; i++) {
+      document.getElementById(this.databtn_id + i.toString()).className = (i == j ? "on" : "");
+    }
+    for (let i = 0; i < this.n_images; i++) {
+      let image_name = document.getElementById(this.imgbtn_id + i.toString()).value;
+      let v = document.getElementById(this.imgtag_id + i.toString());
+      v.src = "images/" + dataset_name + "_" + image_name + ".png";
+    }
+  };
+
+  register() {
+    for (let i = 0; i < this.n_datasets; i++) {
+      document.getElementById(this.databtn_id + i.toString()).addEventListener("click", function() { this.select_dataset(i); }.bind(this, i));
+    }
+
+    for (let i = 0; i < this.n_images; i++) {
+      document.getElementById(this.imgbtn_id + i.toString()).addEventListener("click", function() { this.select_image(i); }.bind(this, i));
+    }
+
+    //this.select_image(0);
+  }
+}
+
+class VideoHandler {
+  constructor(n_datasets, n_videos, databtn_id, vidbtn_id, vidtag_id) {
+    this.n_datasets = n_datasets;
+    this.n_videos = n_videos;
+
+    this.databtn_id = databtn_id;
+    this.vidbtn_id = vidbtn_id;
+    this.vidtag_id = vidtag_id;
+  }
+
+  get paused() {
+    return document.getElementById(this.vidtag_id + "0").paused;
+  }
+
+  sync_video(e) {
+    if (e === undefined) {
+      return;
+    }
+    for (let i = 0; i < this.n_videos; i++) {
+      let v = document.getElementById(this.vidtag_id + i.toString());
+      if (v != e.currentTarget) {
+        v.currentTime = e.currentTarget.currentTime;
+      }
+    }
+  };
+
+  play_video(e) {
+    this.sync_video(e);
+    for (let i = 0; i < this.n_videos; i++) {
+      document.getElementById(this.vidtag_id + i.toString()).play();
+    }
+  };
+
+  pause_video(e) {
+    for (let i = 0; i < this.n_videos; i++) {
+      document.getElementById(this.vidtag_id + i.toString()).pause();
+    }
+    this.sync_video(e);
+  };
+
+  select_video(j) {
+    for (let i = 0; i < this.n_videos; i++) {
+      let v = document.getElementById(this.vidtag_id + i.toString());
+      let b = document.getElementById(this.vidbtn_id + i.toString());
+      if (i == j) {
+        b.className = "on";
+        v.style.display = "block";
+        v.addEventListener("play", this);
+        v.addEventListener("pause", this);
+        v.addEventListener("seeking", this);
+        v.addEventListener("seeked", this);
+        v.addEventListener("playing", this);
+      } else {
+        b.className = "";
+        v.style.display = "none";
+        v.removeEventListener("play", this);
+        v.removeEventListener("pause", this);
+        v.removeEventListener("seeking", this);
+        v.removeEventListener("seeked", this);
+        v.removeEventListener("playing", this);
+      }
+    }
+  };
+
+  handleEvent(e) {
+    switch (e.type) {
+      case "play": this.play_video(e); break;
+      case "pause": this.pause_video(e); break;
+      case "seeking": this.sync_video(e); break;
+      case "seeked": this.sync_video(e); break;
+      case "playing": this.sync_video(e); break;
+    }
+  }
+
+  select_dataset(j) {
+    let autoplay = !this.paused;
+    let dataset_name = document.getElementById(this.databtn_id + j.toString()).value;
+    for (let i = 0; i < this.n_datasets; i++) {
+      document.getElementById(this.databtn_id + i.toString()).className = (i == j ? "on" : "");
+    }
+    for (let i = 0; i < this.n_videos; i++) {
+      let video_name = document.getElementById(this.vidbtn_id + i.toString()).value;
+      let v = document.getElementById(this.vidtag_id + i.toString());
+      v.src = "videos/" + dataset_name + "_" + video_name + ".mp4";
+    }
+    if (autoplay) {
+      this.play_video();
+    }
+  };
+
+  register() {
+    for (let i = 0; i < this.n_datasets; i++) {
+      document.getElementById(this.databtn_id + i.toString()).addEventListener("click", function() { this.select_dataset(i); }.bind(this, i));
+    }
+
+    for (let i = 0; i < this.n_videos; i++) {
+      document.getElementById(this.vidbtn_id + i.toString()).addEventListener("click", function() { this.select_video(i); }.bind(this, i));
+    }
+
+    for (let i = 0; i < this.n_videos; i++) {
+      document.getElementById(this.vidtag_id + i.toString()).muted = true;
+    }
+
+  }
+}
+
+function togglevis(){
+  var x = document.getElementById("prog_opt_vis");
+  if (x.style.display === "none"){
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+
+window.onload = function() {
+  vidcmp_expa_handler = new VideoHandler(12, 5, "vidcmp_expa_data", "vidcmp_expa_btn", "vidcmp_expa_vid");
+  vidcmp_expa_handler.register();
+  try {
+    vidcmp_expa_handler.play_video();
+  } catch (e) {
+  }
+  vidcmp_expb_handler = new VideoHandler(5, 4, "vidcmp_expb_data", "vidcmp_expb_btn", "vidcmp_expb_vid");
+  vidcmp_expb_handler.register();
+  try {
+    vidcmp_expb_handler.play_video();
+  } catch (e) {
+  }
+};
+</script>
+</head>
+<body>
+<h1 class="center" id="top">Progressively Optimized Local Radiance Fields for Robust View Synthesis</h1>
+<h3 class="authors">
+  <span><a href=https://ameuleman.github.io/>Andreas Meuleman</a><sup>1</sup></span>
+  <span><a href=https://www.cmlab.csie.ntu.edu.tw/~yulunliu/>Yu-Lun Liu</a><sup>2</sup></span>
+  <span><a href=http://chengao.vision/>Chen Gao</a><sup>3</sup></span>
+<!-- </h3>
+<h3 class="authors"> -->
+  <span><a href=https://jbhuang0604.github.io/>Jia-Bin Huang</a><sup>3,4</sup></span>
+  <span><a href=https://changilkim.com/>Changil Kim</a><sup>3</sup></span>
+  <span><a href=http://vclab.kaist.ac.kr/minhkim/>Min H. Kim</a><sup>1</sup></span>
+  <span><a href=http://johanneskopf.de/>Johannes Kopf</a><sup>3</sup></span>
+</h3>
+<h3 class="authors">
+  <p><sup>1</sup>KAIST</p>
+  <p><sup>2</sup>National Taiwan University</p>
+  <p><sup>3</sup>Meta</p>
+  <p><sup>4</sup>University of Maryland, College Park</p>
+</h3>
+
+<div class="links">
+  <a href="localrf.pdf"><span><img src="resources/file-earmark-pdf-fill.svg"/> Paper </span></a>
+  <a href="."><span><img src="resources/file-earmark-pdf-fill.svg"/> arXiv (coming soon) </span></a>
+  <a href="https://github.com/facebookresearch/localrf"><span><img src="resources/github.svg"/> Code (coming soon) </span></a>
+  <a href="."><span><img src="resources/hdd-fill.svg" style="vertical-align: -10%;"/> Data (coming soon) </span></a>
+</div>
+
+<h2 id="vidcmp_expa">
+  Video comparisons
+</h2>
+<video id="vidcmp_expa_vid0" controls loop>
+  <source src="videos/forest1_input.mp4" type="video/mp4"/>
+</video>
+<video id="vidcmp_expa_vid1" controls loop>
+  <source src="videos/forest1_mipnerf360.mp4" type="video/mp4"/>
+</video>
+<video id="vidcmp_expa_vid2" controls loop>
+  <source src="videos/forest1_nerfacto.mp4" type="video/mp4"/>
+</video>
+<video id="vidcmp_expa_vid3" controls loop>
+  <source src="videos/forest1_barf.mp4" type="video/mp4"/>
+</video>
+<video id="vidcmp_expa_vid4" controls loop class="on" autoplay muted>
+  <source src="videos/forest1_ours.mp4" type="video/mp4"/>
+</video>
+<div class="flex">
+  <div class="dropdown">
+    <button class="dropbtn">Sequence</button>
+    <div class="dropdown-content">
+      <button id="vidcmp_expa_data0" value="forest1" class="on">Forest 1</button>
+      <button id="vidcmp_expa_data1" value="forest2">Forest 2</button>
+      <button id="vidcmp_expa_data2" value="forest3">Forest 3</button>
+      <button id="vidcmp_expa_data3" value="playground">Playground</button>
+      <button id="vidcmp_expa_data4" value="garden1">Garden 1</button>
+      <button id="vidcmp_expa_data5" value="garden2">Garden 2</button>
+      <button id="vidcmp_expa_data6" value="garden3">Garden 3</button>
+      <button id="vidcmp_expa_data7" value="indoor">Indoor</button>
+      <button id="vidcmp_expa_data8" value="university1">University 1</button>
+      <button id="vidcmp_expa_data9" value="university2">University 2</button>
+      <button id="vidcmp_expa_data10" value="university3">University 3</button>
+      <button id="vidcmp_expa_data11" value="university4">University 4</button>
+    </div>
+  </div>
+  <div class="dropdown">
+    <button class="dropbtn">Method</button>
+    <div class="dropdown-content">  
+      <button id="vidcmp_expa_btn0" value="input">Input</button>
+      <p class="btncap">COLMAP poses</p>
+      <button id="vidcmp_expa_btn1" value="mipnerf360">Mip-NeRF360</button>
+      <button id="vidcmp_expa_btn2" value="nerfacto">Nerfacto</button>
+      <p class="btncap">Self calibrated</p>
+      <button id="vidcmp_expa_btn3" value="barf">BARF</button>
+      <button id="vidcmp_expa_btn4" value="ours" class="on"><b>Ours</b></button>
+    </div>
+  </div>
+  <div class="desc">
+    <p><b>Comparisons.</b> We show rendered smooth trajectory from each method. </b>  
+  </div>
+</div>
+
+<h2 id="prog_opt">
+  Progressive local radiance fields optimization
+</h2>
+<video controls loop class="on" autoplay muted>
+  <source src="videos/prog_opt.mp4" type="video/mp4"/>
+</video>
+<p> We progressively add frames and estimate their poses while optimizing radiance fields. Local radiance fields are dynamically allocated throughout the process. We show the current frames in red and the radiance fields locations with the blue boxes. On the right, we show the last input frame used on top and the last rendered testing view at the bottom. We observe that our method starts estimating a coarse radiance field along with poses before a refinement stage that sharpens the renders. Then, we create a new local radiance field and process another segment of the video. </p>
+
+<h2 id="abstract">
+  Abstract
+</h2>
+<p>
+  We present an algorithm for reconstructing the radiance field of a large-scale scene from a single casually captured video. The task poses two core challenges. First, most existing radiance field reconstruction approaches rely on accurate pre-estimated camera poses from Structure-from-Motion algorithms, which frequently fail on in-the-wild videos. Second, using a single, global radiance field with finite representational capacity does not scale to longer trajectories in an unbounded scene. For handling unknown poses, we jointly estimate the camera poses with radiance field in a progressive manner. We show that progressive optimization significantly improves the robustness of the reconstruction. For handling large unbounded scenes, we dynamically allocate new local radiance fields trained with frames within a temporal window. This further improves robustness (e.g., performs well even under moderate pose drifts) and allows us to scale to large scenes. Our extensive evaluation on the Tanks and Temples dataset and our collected outdoor dataset, Static Hikes, show that our approach compares favorably with the state-of-the-art.
+</p>
+
+<h2 id="prog_opt">
+  Stabilization comparison
+</h2>
+<div class="column_l">
+  <video controls loop class="on" autoplay muted>
+    <source src="videos/fusta.mp4" type="video/mp4"/>
+  </video>
+  <p class="center"> <b>FuSta</b> </p>
+</div>
+<div class="column_r">
+  <video controls loop class="on" autoplay muted>
+    <source src="videos/sta_ours.mp4" type="video/mp4"/>
+  </video>
+  <p class="center"> <b>Ours</b> </p>
+</div>
+<p> By smoothing the camera path, we achieve much smoother stabilization than 2D methods such as FuSta. </p>
+
+<h2 id="vidcmp_expb">
+  Ablations
+</h2>
+<video id="vidcmp_expb_vid0" controls loop >
+  <source src="videos/forest1_input.mp4" type="video/mp4" autoplay muted/>
+</video>
+<video id="vidcmp_expb_vid1" controls loop >
+  <source src="videos/forest1_no_prog.mp4" type="video/mp4" autoplay muted/>
+</video>
+<video id="vidcmp_expb_vid2" controls loop >
+  <source src="videos/forest1_no_loc.mp4" type="video/mp4" autoplay muted/>
+</video>
+<video id="vidcmp_expb_vid3" controls loop class="on" autoplay muted>
+  <source src="videos/forest1_ours.mp4" type="video/mp4"/>
+</video>
+<div class="flex">
+  <div class="dropdown">
+    <button class="dropbtn">Sequence</button>
+    <div class="dropdown-content">
+      <button id="vidcmp_expb_data0" value="forest1" class="on">Forest 1</button>
+      <button id="vidcmp_expb_data1" value="forest2">Forest 2</button>
+      <button id="vidcmp_expb_data2" value="university1">University 1</button>
+      <button id="vidcmp_expb_data3" value="university2">University 2</button>
+      <button id="vidcmp_expb_data4" value="playground">Playground</button>
+    </div>
+  </div>
+  <div class="dropdown">
+    <button class="dropbtn">Method</button>
+    <div class="dropdown-content">
+      <button id="vidcmp_expb_btn0" value="input">Input</button>
+      <button id="vidcmp_expb_btn1" value="no_prog">Ours w/o Progressive Optimization</button>
+      <button id="vidcmp_expb_btn2" value="no_loc">Ours w/o Local Radiance Fields</button>
+      <button id="vidcmp_expb_btn3" value="ours" class="on"><b>Ours</b></button>
+    </div>
+  </div>
+  <div class="desc">
+    <p> <b>Ablation.</b> Progressive optimization is crucial to the pose estimation and local radiance fields grants more robustness and improves sharpness in later parts of the sequences. </p>
+  </div>
+</div>
+
+</body>
+</html>
+
+<h2 id="citation">
+  Citation
+</h2>
+<pre>
+@inproceedings{meuleman2023localrf,
+  author    = {Meuleman, Andreas and Liu, Yu-Lun and Gao, Chen and Huang, Jia-Bin and Kim, Changil and Kim, Min H. and Kopf, Johannes},
+  title     = {Progressively Optimized Local Radiance Fields for Robust View Synthesis},
+  booktitle = {CVPR},
+  year      = {2023},
+}
+</pre>
