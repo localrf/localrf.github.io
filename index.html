@@ -13,7 +13,6 @@ body {
   /* font-size: 11pt; */
   /* line-height: 1.2em; */
   font-size: 14px;
-  line-height: 18px;
   font-weight: 300;
   text-align: left;
   background-color: white;
@@ -26,10 +25,8 @@ body {
   text-align: justify;
 }
 h1 {
-  /* text-align: center; */
-  text-align: left;
-}
-h1 {
+  text-align: center;
+  line-height: 2em;
   font-size: 2em;
   margin-top: 2em;
   margin-bottom: 2em;
@@ -146,7 +143,7 @@ button {
 
 button.on {
   background-color: #333;
-  color: #bbb;
+  color: #eee;
 }
 
 p.btncap {
@@ -166,7 +163,7 @@ p.btncap {
   display: flex;
 }
 .desc {
-  margin: 1.5em 0.8em;
+  margin: 0em 0.8em;
 }
 .wider_buttons button {
   display: block;
@@ -216,11 +213,15 @@ img.on {
   display: block;
 }
 
-/* .small_div{
-  text-align: justify;
-  margin: 0.4em;
-  width: 1024px;
-} */
+.column_l { 
+  width: 49%; 
+  float: left; 
+  margin-right: 2%;
+} 
+.column_r { 
+  width: 49%; 
+  float: left; 
+} 
 
 .teaser {
 }
@@ -335,7 +336,40 @@ em {
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
+
+.dropbtn {
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #aaaaaa;}
+
+button:hover {background-color: #aaaaaa;}
+
 </style>
+
 <script>
 class ImageHandler {
   constructor(n_datasets, n_images, databtn_id, imgbtn_id, imgtag_id) {
@@ -502,7 +536,7 @@ function togglevis(){
 }
 
 window.onload = function() {
-  vidcmp_expa_handler = new VideoHandler(5, 4, "vidcmp_expa_data", "vidcmp_expa_btn", "vidcmp_expa_vid");
+  vidcmp_expa_handler = new VideoHandler(5, 5, "vidcmp_expa_data", "vidcmp_expa_btn", "vidcmp_expa_vid");
   vidcmp_expa_handler.register();
   try {
     vidcmp_expa_handler.play_video();
@@ -539,8 +573,8 @@ window.onload = function() {
 
 <div class="links">
   <a href="localrf.pdf"><span><img src="resources/file-earmark-pdf-fill.svg"/> Paper </span></a>
-  <a href="."><span><img src="resources/file-earmark-pdf-fill.svg"/> arXiv </span></a>
-  <a href="."></a><span><img src="resources/github.svg"/> Code (coming soon) </span></a>
+  <a href="."><span><img src="resources/file-earmark-pdf-fill.svg"/> arXiv (coming soon) </span></a>
+  <a href="https://github.com/facebookresearch/localrf"><span><img src="resources/github.svg"/> Code (coming soon) </span></a>
   <a href="."></a><span><img src="resources/hdd-fill.svg" style="vertical-align: -10%;"/> Data (coming soon) </span></a>
 </div>
 
@@ -556,27 +590,37 @@ window.onload = function() {
 <video id="vidcmp_expa_vid2" controls loop>
   <source src="videos/forest1_nerfacto.mp4" type="video/mp4"/>
 </video>
-<video id="vidcmp_expa_vid3" controls loop class="on" autoplay muted>
+<video id="vidcmp_expa_vid3" controls loop>
+  <source src="videos/forest1_barf.mp4" type="video/mp4"/>
+</video>
+<video id="vidcmp_expa_vid4" controls loop class="on" autoplay muted>
   <source src="videos/forest1_ours.mp4" type="video/mp4"/>
 </video>
 <div class="flex">
-  <div>
-    <p class="btncap">Sequence</p>
-    <button id="vidcmp_expa_data0" value="forest1" class="on">Forest 1</button>
-    <button id="vidcmp_expa_data1" value="forest2">Forest 2</button>
-    <button id="vidcmp_expa_data2" value="university1">University 1</button>
-    <button id="vidcmp_expa_data3" value="university2">University 2</button>
-    <button id="vidcmp_expa_data4" value="playground">Playground</button>
+  <div class="dropdown">
+    <button class="dropbtn">Sequence</button>
+    <div class="dropdown-content">
+      <button id="vidcmp_expa_data0" value="forest1" class="on">Forest 1</button>
+      <button id="vidcmp_expa_data1" value="forest2">Forest 2</button>
+      <button id="vidcmp_expa_data2" value="university1">University 1</button>
+      <button id="vidcmp_expa_data3" value="university2">University 2</button>
+      <button id="vidcmp_expa_data4" value="playground">Playground</button>
+    </div>
   </div>
-  <div class="wider_buttons">
-    <p class="btncap">Method</p>
-    <button id="vidcmp_expa_btn0" value="input">Input</button>
-    <button id="vidcmp_expa_btn1" value="mipnerf360">Mip-NeRF360</button>
-    <button id="vidcmp_expa_btn2" value="nerfacto">Nerfacto</button>
-    <button id="vidcmp_expa_btn3" value="ours" class="on"><b>Ours</b></button>
+  <div class="dropdown">
+    <button class="dropbtn">Method</button>
+    <div class="dropdown-content">  
+      <button id="vidcmp_expa_btn0" value="input">Input</button>
+      <p class="btncap">COLMAP poses</p>
+      <button id="vidcmp_expa_btn1" value="mipnerf360">Mip-NeRF360</button>
+      <button id="vidcmp_expa_btn2" value="nerfacto">Nerfacto</button>
+      <p class="btncap">Self calibrated</p>
+      <button id="vidcmp_expa_btn3" value="barf">BARF</button>
+      <button id="vidcmp_expa_btn4" value="ours" class="on"><b>Ours</b></button>
+    </div>
   </div>
   <div class="desc">
-    <p><b>Comparisons.</b> We show rendered smooth trajectory from each method. We use COLMAP poses for Mip-NeRF360 and Nerfacto, which particularly struggle in the Forest 1 and Playground sequences. </b>  
+    <p><b>Comparisons.</b> We show rendered smooth trajectory from each method. </b>  
   </div>
 </div>
 
@@ -595,6 +639,22 @@ window.onload = function() {
   We present an algorithm for reconstructing the radiance field of a large-scale scene from a single casually captured video. The task poses two core challenges. First, most existing radiance field reconstruction approaches rely on accurate pre-estimated camera poses from Structure-from-Motion algorithms, which frequently fail on in-the-wild videos. Second, using a single, global radiance field with finite representational capacity does not scale to longer trajectories in an unbounded scene. For handling unknown poses, we jointly estimate the camera poses with radiance field in a progressive manner. We show that progressive optimization significantly improves the robustness of the reconstruction. For handling large unbounded scenes, we dynamically allocate new local radiance fields trained with frames within a temporal window. This further improves robustness (e.g., performs well even under moderate pose drifts) and allows us to scale to large scenes. Our extensive evaluation on the Tanks and Temples dataset and our collected outdoor dataset, Static Hikes, show that our approach compares favorably with the state-of-the-art.
 </p>
 
+<h2 id="prog_opt">
+  Stabilization comparison
+</h2>
+<div class="column_l">
+  <video controls loop class="on" autoplay muted>
+    <source src="videos/fusta.mp4" type="video/mp4"/>
+  </video>
+  <p class="center"> <b>FuSta</b> </p>
+</div>
+<div class="column_r">
+  <video controls loop class="on" autoplay muted>
+    <source src="videos/sta_ours.mp4" type="video/mp4"/>
+  </video>
+  <p class="center"> <b>Ours</b> </p>
+</div>
+<p> By smoothing the camera path, we achieve much smoother stabilization than 2D methods such as FuSta. </p>
 
 <h2 id="vidcmp_expb">
   Ablations
@@ -612,20 +672,24 @@ window.onload = function() {
   <source src="videos/forest1_ours.mp4" type="video/mp4"/>
 </video>
 <div class="flex">
-  <div>
-    <p class="btncap">Sequence</p>
-    <button id="vidcmp_expb_data0" value="forest1" class="on">Forest 1</button>
-    <button id="vidcmp_expb_data1" value="forest2">Forest 2</button>
-    <button id="vidcmp_expb_data2" value="university1">University 1</button>
-    <button id="vidcmp_expb_data3" value="university2">University 2</button>
-    <button id="vidcmp_expb_data4" value="playground">Playground</button>
+  <div class="dropdown">
+    <button class="dropbtn">Sequence</button>
+    <div class="dropdown-content">
+      <button id="vidcmp_expb_data0" value="forest1" class="on">Forest 1</button>
+      <button id="vidcmp_expb_data1" value="forest2">Forest 2</button>
+      <button id="vidcmp_expb_data2" value="university1">University 1</button>
+      <button id="vidcmp_expb_data3" value="university2">University 2</button>
+      <button id="vidcmp_expb_data4" value="playground">Playground</button>
+    </div>
   </div>
-  <div class="wider_buttons">
-    <p class="btncap">Method</p>
-    <button id="vidcmp_expb_btn0" value="input">Input</button>
-    <button id="vidcmp_expb_btn1" value="no_prog">Ours w/o Progressive Optimization</button>
-    <button id="vidcmp_expb_btn2" value="no_loc">Ours w/o Local Radiance Fields</button>
-    <button id="vidcmp_expb_btn3" value="ours" class="on"><b>Ours</b></button>
+  <div class="dropdown">
+    <button class="dropbtn">Sequence</button>
+    <div class="dropdown-content">
+      <button id="vidcmp_expb_btn0" value="input">Input</button>
+      <button id="vidcmp_expb_btn1" value="no_prog">Ours w/o Progressive Optimization</button>
+      <button id="vidcmp_expb_btn2" value="no_loc">Ours w/o Local Radiance Fields</button>
+      <button id="vidcmp_expb_btn3" value="ours" class="on"><b>Ours</b></button>
+    </div>
   </div>
   <div class="desc">
     <p> <b>Ablation.</b> Progressive optimization is crucial to the pose estimation and local radiance fields grants more robustness and improves sharpness in later parts of the sequences. </p>
