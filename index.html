@@ -29,12 +29,12 @@ h1 {
   text-align: left;
 }
 h1 {
-  font-size: 1.5em;
+  font-size: 2em;
   margin-top: 2em;
-  margin-bottom: 1em;
+  margin-bottom: 2em;
 }
 h2 {
-  font-size: 1.15em;
+  font-size: 1.5em;
   margin-top: 1.5em;
   /* margin-bottom: 0; */
 }
@@ -189,9 +189,9 @@ button {
   display: block;
 }
 video {
-  width: 820px;
+  height: 560px;
+  margin: auto;
   display: none;
-  margin: 0.4em;
 }
 
 video.on {
@@ -215,24 +215,10 @@ img.on {
   display: block;
 }
 
-.abstract{
-  width: 820px;
-  text-align: justify;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.abstract.img{
-  width: 820px;
-}
-
 .small_div{
+  text-align: justify;
   margin: 0.4em;
-  width: 720px;
-}
-
-.small_div video{
-  width: 720px;
+  width: 1024px;
 }
 
 .teaser {
@@ -532,21 +518,23 @@ window.onload = function() {
 </head>
 <body>
 <h1 class="center" id="top">Progressively Optimized Local Radiance Fields for Robust View Synthesis</h1>
-<h2 class="authors">
-  <a href=https://ameuleman.github.io/>Andreas <br> Meuleman<sup>1</sup></a>
-  <a href=https://www.cmlab.csie.ntu.edu.tw/~yulunliu/>Yu-Lun <br> Liu<sup>2</sup></a>
-  <a href=http://chengao.vision/>Chen <br> Gao<sup>3</sup></a>
-  <a href=https://jbhuang0604.github.io/>Jia-Bin <br> Huang<sup>3,4</sup></a>
-  <a href=https://changilkim.com/>Changil <br> Kim<sup>3</sup></a>
-  <a href=http://vclab.kaist.ac.kr/minhkim/>Min H. <br> Kim<sup>1</sup></a>
-  <a href=http://johanneskopf.de/>Johannes <br> Kopf<sup>3</sup></a>
-</h2>
-<h2 class="authors">
-  <a href="https://www.kaist.ac.kr/en/"><sup>1</sup>KAIST</a>
-  <a href="https://www.ntu.edu.tw/"><sup>2</sup>NTU</a>
-  <a href="https://about.meta.com/realitylabs/?utm_source=about.facebook.com&utm_medium=redirect"><sup>3</sup>Meta</a>
-  <a href="https://www.umd.edu/"><sup>4</sup>UMD</a>
-</h2>
+<h3 class="authors">
+  <span><a href=https://ameuleman.github.io/>Andreas Meuleman</a><sup>1</sup></span>
+  <span><a href=https://www.cmlab.csie.ntu.edu.tw/~yulunliu/>Yu-Lun Liu</a><sup>2</sup></span>
+  <span><a href=http://chengao.vision/>Chen Gao</a><sup>3</sup></span>
+<!-- </h3>
+<h3 class="authors"> -->
+  <span><a href=https://jbhuang0604.github.io/>Jia-Bin Huang</a><sup>3,4</sup></span>
+  <span><a href=https://changilkim.com/>Changil Kim</a><sup>3</sup></span>
+  <span><a href=http://vclab.kaist.ac.kr/minhkim/>Min H. Kim</a><sup>1</sup></span>
+  <span><a href=http://johanneskopf.de/>Johannes Kopf</a><sup>3</sup></span>
+</h3>
+<h3 class="authors">
+  <p><sup>1</sup>KAIST</p>
+  <p><sup>2</sup>National Taiwan University</p>
+  <p><sup>3</sup>Meta</p>
+  <p><sup>4</sup>University of Maryland, College Park</p>
+</h3>
 
 <div class="links">
   <a href="localrf.pdf"><span><img src="resources/file-earmark-pdf-fill.svg"/> Paper </span></a>
@@ -555,23 +543,21 @@ window.onload = function() {
   <a href="."></a><span><img src="resources/hdd-fill.svg" style="vertical-align: -10%;"/> Data (coming soon) </span></a>
 </div>
 
-
-<h2>Table of Contents</h2>
-<div>
-  <ul>
-    <li><a href="#vidcmp_expa">Video comparisons</a></li>
-    <li><a href="#prog_opt">Progressive local radiance fields optimization</a></li>
-    <li><a href="#abstract">Abstract</a></li>
-    <li><a href="#vidcmp_expb">Ablations</a></li>
-    <li><a href="#citation">Citation</a></li>
-  </ul>
-</div>
-
-
 <h2 id="vidcmp_expa">
   Video comparisons
-  <span><a href="#top">&uarr;</a></span>
 </h2>
+<video id="vidcmp_expa_vid0" controls loop>
+  <source src="videos/forest1_input.mp4" type="video/mp4"/>
+</video>
+<video id="vidcmp_expa_vid1" controls loop>
+  <source src="videos/forest1_mipnerf360.mp4" type="video/mp4"/>
+</video>
+<video id="vidcmp_expa_vid2" controls loop>
+  <source src="videos/forest1_nerfacto.mp4" type="video/mp4"/>
+</video>
+<video id="vidcmp_expa_vid3" controls loop class="on" autoplay muted>
+  <source src="videos/forest1_ours.mp4" type="video/mp4"/>
+</video>
 <div class="flex">
   <div>
     <p class="btncap">Sequence</p>
@@ -592,22 +578,9 @@ window.onload = function() {
     <p><b>Comparisons.</b> We show rendered smooth trajectory from each method. We use COLMAP poses for Mip-NeRF360 and Nerfacto, which particularly struggle in the Forest 1 and Playground sequences. </b>  
   </div>
 </div>
-<video id="vidcmp_expa_vid0" controls loop>
-  <source src="videos/forest1_input.mp4" type="video/mp4"/>
-</video>
-<video id="vidcmp_expa_vid1" controls loop>
-  <source src="videos/forest1_mipnerf360.mp4" type="video/mp4"/>
-</video>
-<video id="vidcmp_expa_vid2" controls loop>
-  <source src="videos/forest1_nerfacto.mp4" type="video/mp4"/>
-</video>
-<video id="vidcmp_expa_vid3" controls loop class="on" autoplay muted>
-  <source src="videos/forest1_ours.mp4" type="video/mp4"/>
-</video>
 
 <h2 id="prog_opt">
   Progressive local radiance fields optimization
-  <span><a href="#top">&uarr;</a></span>
 </h2>
 <div class="flex">
   <div class="small_div">
@@ -621,10 +594,9 @@ window.onload = function() {
 
 <h2 id="abstract">
   Abstract
-  <span><a href="#top">&uarr;</a></span>
 </h2>
-<div class="center">
-  <p class="abstract">
+<div class="small_div">
+  <p>
   We present an algorithm for reconstructing the radiance field of a large-scale scene from a single casually captured video. The task poses two core challenges. First, most existing radiance field reconstruction approaches rely on accurate pre-estimated camera poses from Structure-from-Motion algorithms, which frequently fail on in-the-wild videos. Second, using a single, global radiance field with finite representational capacity does not scale to longer trajectories in an unbounded scene. For handling unknown poses, we jointly estimate the camera poses with radiance field in a progressive manner. We show that progressive optimization significantly improves the robustness of the reconstruction. For handling large unbounded scenes, we dynamically allocate new local radiance fields trained with frames within a temporal window. This further improves robustness (e.g., performs well even under moderate pose drifts) and allows us to scale to large scenes. Our extensive evaluation on the Tanks and Temples dataset and our collected outdoor dataset, Static Hikes, show that our approach compares favorably with the state-of-the-art.
   </p>
 </div>
@@ -632,8 +604,19 @@ window.onload = function() {
 
 <h2 id="vidcmp_expb">
   Ablations
-  <span><a href="#top">&uarr;</a></span>
 </h2>
+<video id="vidcmp_expb_vid0" controls loop >
+  <source src="videos/forest1_input.mp4" type="video/mp4" autoplay muted/>
+</video>
+<video id="vidcmp_expb_vid1" controls loop >
+  <source src="videos/forest1_no_prog.mp4" type="video/mp4" autoplay muted/>
+</video>
+<video id="vidcmp_expb_vid2" controls loop >
+  <source src="videos/forest1_no_loc.mp4" type="video/mp4" autoplay muted/>
+</video>
+<video id="vidcmp_expb_vid3" controls loop class="on" autoplay muted>
+  <source src="videos/forest1_ours.mp4" type="video/mp4"/>
+</video>
 <div class="flex">
   <div>
     <p class="btncap">Sequence</p>
@@ -654,32 +637,19 @@ window.onload = function() {
     <p> <b>Ablation.</b> Progressive optimization is crucial to the pose estimation and local radiance fields grants more robustness and improves sharpness in later parts of the sequences. </p>
   </div>
 </div>
-<video id="vidcmp_expb_vid0" controls loop >
-  <source src="videos/forest1_input.mp4" type="video/mp4" autoplay muted/>
-</video>
-<video id="vidcmp_expb_vid1" controls loop >
-  <source src="videos/forest1_no_prog.mp4" type="video/mp4" autoplay muted/>
-</video>
-<video id="vidcmp_expb_vid2" controls loop >
-  <source src="videos/forest1_no_loc.mp4" type="video/mp4" autoplay muted/>
-</video>
-<video id="vidcmp_expb_vid3" controls loop class="on" autoplay muted>
-  <source src="videos/forest1_ours.mp4" type="video/mp4"/>
-</video>
 
 </body>
 </html>
 
 <h2 id="citation">
   Citation
-  <span><a href="#top">&uarr;</a></span>
 </h2>
 <div class="small_div">
   <pre>
-  @InProceedings{meuleman2022,
+  @article{meuleman2023localrf,
     author    = {Meuleman, Andreas and Liu, Yu-Lun and Gao, Chen and Huang, Jia-Bin and Kim, Changil and Kim, Min H. and Kopf, Johannes},
     title     = {Progressively Optimized Local Radiance Fields for Robust View Synthesis},
-    booktitle = {arXiv},
+    journal = {arXiv},
     year      = {2023},
   }
   </pre>
