@@ -536,7 +536,7 @@ function togglevis(){
 }
 
 window.onload = function() {
-  vidcmp_expa_handler = new VideoHandler(12, 5, "vidcmp_expa_data", "vidcmp_expa_btn", "vidcmp_expa_vid");
+  vidcmp_expa_handler = new VideoHandler(12, 6, "vidcmp_expa_data", "vidcmp_expa_btn", "vidcmp_expa_vid");
   vidcmp_expa_handler.register();
   try {
     vidcmp_expa_handler.play_video();
@@ -593,7 +593,10 @@ window.onload = function() {
 <video id="vidcmp_expa_vid3" controls loop>
   <source src="videos/forest1_barf.mp4" type="video/mp4"/>
 </video>
-<video id="vidcmp_expa_vid4" controls loop class="on" autoplay muted>
+<video id="vidcmp_expa_vid4" controls loop>
+  <source src="videos/forest1_nopenerf.mp4" type="video/mp4"/>
+</video>
+<video id="vidcmp_expa_vid5" controls loop class="on" autoplay muted>
   <source src="videos/forest1_ours.mp4" type="video/mp4"/>
 </video>
 <div class="flex">
@@ -623,7 +626,8 @@ window.onload = function() {
       <button id="vidcmp_expa_btn2" value="nerfacto">Nerfacto</button>
       <p class="btncap">Self calibrated</p>
       <button id="vidcmp_expa_btn3" value="barf">BARF</button>
-      <button id="vidcmp_expa_btn4" value="ours" class="on"><b>Ours</b></button>
+      <button id="vidcmp_expa_btn4" value="nopenerf">NoPe-NeRF</button>
+      <button id="vidcmp_expa_btn5" value="ours" class="on"><b>Ours</b></button>
     </div>
   </div>
   <div class="desc">
